@@ -9,9 +9,17 @@
 <meta name="theme-color" content="#121a17">
 <!-- Planilla LUD ahora vive en https://planilla-lud.github.io/. Esta página solo redirige, conservando la
      sección que se pidió (el #/... de la dirección), para que no se rompan los links viejos ni las apps
-     instaladas con la dirección anterior. -->
+     instaladas con la dirección anterior. Cada dirección tiene su propia memoria del navegador: lo que la
+     persona tenía guardado acá (Mi equipo, el voto del contador...) viaja en ?migrar= y la app nueva lo
+     guarda. -->
 <script>
-  location.replace('https://planilla-lud.github.io/' + location.search + location.hash);
+  var q = location.search;
+  try {
+    var datos = {};
+    for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); datos[k] = localStorage.getItem(k); }
+    if (Object.keys(datos).length) q = (q ? q + '&' : '?') + 'migrar=' + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(datos)))));
+  } catch (e) {}
+  location.replace('https://planilla-lud.github.io/' + q + location.hash);
 </script>
 <noscript><meta http-equiv="refresh" content="0; url=https://planilla-lud.github.io/"></noscript>
 <style>
